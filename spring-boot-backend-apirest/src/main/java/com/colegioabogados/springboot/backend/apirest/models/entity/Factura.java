@@ -37,7 +37,7 @@ public class Factura implements Serializable {
 	private String serie;
 	
 	@NotEmpty(message = "no puede estar vacío")
-	@Column(name = "numero_boleta",unique = true,nullable = false)
+	@Column(name = "numero_boleta",nullable = true)
 	private String numeroBoleta;
 	
 
@@ -65,8 +65,6 @@ public class Factura implements Serializable {
 	
 	private String extornador;
 	
-	private String filial;
-	
 	//Tipo de factura
 	//1: cuota
 	//2: tramite
@@ -87,6 +85,20 @@ public class Factura implements Serializable {
 	private Date fechaHasta;
 	
 	private Double descuento=0.0;
+	
+	//Nuevos parametros para municipalidad
+	private Double deuda=0.0;
+	private Double deudaAgua=0.0;
+	private Double deudaLimpieza=0.0;
+	//Estado 0 sin pagar 1 pagado
+	private Boolean estado;
+	private String fechaEmision;
+	private String fechaUltima;
+	private String forma;
+	private Boolean fraccionamiento;
+	private Double montoFraccionamiento;
+	private Double montoMensual;
+	private Double montoTotal;
 	
 	public static final long HOUR = 3600*1000; // in milli-seconds.
 	
@@ -257,13 +269,97 @@ public class Factura implements Serializable {
 		this.razon = razon;
 	}
 	
-	public String getFilial() {
-		return filial;
+	
+
+	public Double getDeuda() {
+		return deuda;
 	}
 
-	public void setFilial(String filial) {
-		this.filial = filial;
+	public void setDeuda(Double deuda) {
+		this.deuda = deuda;
 	}
+
+	public Double getDeudaAgua() {
+		return deudaAgua;
+	}
+
+	public void setDeudaAgua(Double deudaAgua) {
+		this.deudaAgua = deudaAgua;
+	}
+
+	public Double getDeudaLimpieza() {
+		return deudaLimpieza;
+	}
+
+	public void setDeudaLimpieza(Double deudaLimpieza) {
+		this.deudaLimpieza = deudaLimpieza;
+	}
+
+	public Boolean getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Boolean estado) {
+		this.estado = estado;
+	}
+
+	public String getFechaEmision() {
+		return fechaEmision;
+	}
+
+	public void setFechaEmision(String fechaEmision) {
+		this.fechaEmision = fechaEmision;
+	}
+
+	public String getFechaUltima() {
+		return fechaUltima;
+	}
+
+	public void setFechaUltima(String fechaUltima) {
+		this.fechaUltima = fechaUltima;
+	}
+
+	public String getForma() {
+		return forma;
+	}
+
+	public void setForma(String forma) {
+		this.forma = forma;
+	}
+
+	public Boolean getFraccionamiento() {
+		return fraccionamiento;
+	}
+
+	public void setFraccionamiento(Boolean fraccionamiento) {
+		this.fraccionamiento = fraccionamiento;
+	}
+
+	public Double getMontoFraccionamiento() {
+		return montoFraccionamiento;
+	}
+
+	public void setMontoFraccionamiento(Double montoFraccionamiento) {
+		this.montoFraccionamiento = montoFraccionamiento;
+	}
+
+	public Double getMontoMensual() {
+		return montoMensual;
+	}
+
+	public void setMontoMensual(Double montoMensual) {
+		this.montoMensual = montoMensual;
+	}
+
+	public Double getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(Double montoTotal) {
+		this.montoTotal = montoTotal;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 }

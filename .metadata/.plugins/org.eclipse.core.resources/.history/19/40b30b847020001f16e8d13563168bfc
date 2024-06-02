@@ -1,0 +1,346 @@
+package com.colegioabogados.springboot.backend.apirest.models.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.colegioabogados.springboot.backend.apirest.models.dao.IColegiadoDao;
+import com.colegioabogados.springboot.backend.apirest.models.dao.IDireccionDao;
+import com.colegioabogados.springboot.backend.apirest.models.dao.IFacturaDao;
+import com.colegioabogados.springboot.backend.apirest.models.dao.IImagenDao;
+import com.colegioabogados.springboot.backend.apirest.models.dao.IMultaDao;
+import com.colegioabogados.springboot.backend.apirest.models.dao.ITramiteDao;
+
+import com.colegioabogados.springboot.backend.apirest.models.entity.Colegiado;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Direccion;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Factura;
+
+import com.colegioabogados.springboot.backend.apirest.models.entity.Imagen;
+
+import com.colegioabogados.springboot.backend.apirest.models.entity.Sistema;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Tramite;
+
+@Service
+public class ColegiadoServiceImpl implements IColegiadoService{
+	
+	@Autowired
+	private IColegiadoDao colegiadoDao;
+	@Autowired
+	private IFacturaDao facturaDao;
+	@Autowired
+	private ITramiteDao tramiteDao;
+	@Autowired
+	private IMultaDao multaDao;
+	@Autowired
+	private IDireccionDao direccionDao;
+	@Autowired
+	private IImagenDao imagenDao;
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Colegiado> findAll() {
+		return (List<Colegiado>) colegiadoDao.findAll();
+	}
+	
+	// ---  UNIVERSIDADES ---
+	/*
+	@Override
+	@Transactional(readOnly = true)
+	public List<Universidad> findAllUniversidades() {
+		return colegiadoDao.findAllUniversidades();
+	}
+	
+	@Override
+	public Universidad findUniversidadById(Long id) {
+		return universidadDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public Universidad saveUniversidad(Universidad universidad) {
+		return universidadDao.save(universidad);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Habilidad> findAllHabilidades() {
+		return colegiadoDao.findAllHabilidades();
+	}
+	*/
+	@Override
+	@Transactional(readOnly = true)
+	public List<Colegiado> findColegiadoByDni(String term) {
+		return colegiadoDao.findByDni(term);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Colegiado> findColegiadoByApellido(String term) {
+		return colegiadoDao.findByApellido(term);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Colegiado> findColegiadoByColegiatura(String term) {
+		return colegiadoDao.findByColegiatura(term);
+	}
+
+	//Listar colegiados del presente año
+	@Override
+	@Transactional(readOnly = true)
+	public List<Colegiado> findColegiadosUltimos() {
+		return colegiadoDao.findColegiadosUltimos();
+	}
+	
+	@Override
+	public List<Colegiado> findColegiadoByNombre(String term) {
+		return colegiadoDao.findByNombre(term);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Colegiado findColegiadoByCole(String term) {
+		return colegiadoDao.findColegiadoByCole(term);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Colegiado findById(Long id) {
+		return colegiadoDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public Colegiado save(Colegiado colegiado) {
+		return colegiadoDao.save(colegiado);
+	}
+
+	//Facturas
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Factura findFacturaById(Long id) {
+		return facturaDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public Factura saveFactura(Factura factura) {
+		return facturaDao.save(factura);
+	}
+
+	@Override
+	public void deleteFacturaById(Long id) {
+		facturaDao.deleteById(id);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Long verficarNumeroBoleta(String term) {
+		return facturaDao.verficarNumeroBoleta(term);
+	}
+	//SVDY 08012023 Validar que factuta tipo cuota sea la ultima sin extornar
+	@Override
+	@Transactional(readOnly = true)
+	public Long verficarBoletaExtorno(String term) {
+		return facturaDao.verficarBoletaExtorno(term);
+	}
+	//SVDY 25022023 Traer factura por nro de boleta
+	@Override
+	public Factura obtenerFacturaPorNroBoleta(String term) {
+		return facturaDao.obtenerFacturaPorNroBoleta(term);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Factura> listarFacturasPorDia(String term1, String term2) {
+		return facturaDao.listarFacturasDia(term1,term2);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Tramite> findTramiteByNombre(String term) {
+		return tramiteDao.findByNombre(term);
+	}
+	
+	//SVDY 11012023 filtrar cursos 
+	@Override
+	public List<Tramite> findTramiteByCurso(String term) {
+		return tramiteDao.findByCurso(term);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Tramite findTramiteById(Long id) {
+		return tramiteDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Colegiado findTopByOrderByColegiaturaDesc() {
+		return colegiadoDao.findLastColegiado();
+	}
+
+	@Override
+	public Tramite saveTramite(Tramite tramite) {
+		return tramiteDao.save(tramite);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Tramite> findAllTramites() {
+		return (List<Tramite>) tramiteDao.findAll();
+	}
+	//---- Servicios para multas ----
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Tramite> findAllMultas(String term) {
+		return (List<Tramite>) multaDao.findAllMultas(term);
+	}
+	//Obtener cumpleañeros
+	@Override
+	public List<Colegiado> findColegiadoCumple() {
+		return (List<Colegiado>) colegiadoDao.findColegiadoCumple();
+	}
+	//Obtener colegiados por habilidad
+	@Override
+	public List<Object[]> findColegiadoHabilidad(Long term) {
+		return (List<Object[]>)colegiadoDao.ColegiadoHabilidad(term);
+	}
+	//Obtener colegiados habilitados-activos
+	@Override
+	public List<Object[]> ColegiadoHabilitadoActivo() {
+		return (List<Object[]>)colegiadoDao.ColegiadoHabilitadoActivo();
+	}
+	//SVDY 25022023  Obtener ultimo id insertado en factura
+	@Override
+	public Long obtenerUltimaIdFactura() {
+		return facturaDao.obtenerUltimaIdFactura();
+	}
+	//Servicio para obtener cumpleañeros por fecha
+	@Override
+	public List<Object[]> ColegiadoCumpleFecha(String term) {
+		return colegiadoDao.findCumpleFecha(term);
+	}
+	/*
+	//Servicio para obtenes credenciales de agremiado
+	@Override
+	public List<Object[]> DatosAgremiado(String term) {
+		return agremiadoDao.ObtenerDatosAgremiado(term);
+	}
+
+	@Override
+	public Agremiado saveAgremiado(Agremiado agremiado) {
+		return agremiadoDao.save(agremiado);
+	}
+	*/
+	//----------------- SERVICIOS EXTERNOS ------------------
+	@Override
+	public List<Sistema> obtenerMensajeSistema() {
+		return (List<Sistema>) colegiadoDao.traerSistema();
+	}
+	
+	@Override
+	public Colegiado findColegiadoByColegiaturaExterno(String term) {
+		return colegiadoDao.findColegiadoByColegiaturaExterno(term);
+	}
+
+	@Override
+	public Colegiado findColegiadoByNombreApellidoExterno(String term1, String term2) {
+		return colegiadoDao.findColegiadoByNombreApellidoExterno(term1, term2);
+	}
+
+	@Override
+	public List<Tramite> listarNombresMultas() {
+		return multaDao.listarMultasExternas();
+	}
+	//SVDY 16012023 Almacenar imagenes
+	@Override
+	public Imagen findImagenById(Long id) {
+		return imagenDao.findById(id).orElse(null);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Imagen findImagenByColegiatura(String term) {
+		return imagenDao.findImagenByCole(term);
+	}
+
+	@Override
+	public Imagen saveImagen(Imagen imagen) {
+		return imagenDao.save(imagen);
+	}
+
+	@Override
+	public boolean existImagen(Long id) {
+		return imagenDao.existsById(id);
+	}
+
+	@Override
+	public void deleteImagen(Long id) {
+		imagenDao.deleteById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Object[]> obtenerDatoscolegiado(String term) {
+		return  (List<Object[]>)colegiadoDao.AgremiadoDatos(term);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Object[]> obtenerCursosColegiado(String term) {
+		return  (List<Object[]>)colegiadoDao.AgremiadoCursos(term);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Object[]> obtenerHabilidadColegiado(String term) {
+		return (List<Object[]>)colegiadoDao.AgremiadoHabilidad(term);
+	}
+
+	@Override
+	public List<Direccion> findAllDirecciones() {
+		return colegiadoDao.findAllDireccion();
+	}
+
+	@Override
+	public Direccion findDireccionById(Long id) {
+		return direccionDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public Direccion saveDireccion(Direccion direccionDao) {
+		return direccionDao.save(direccionDao);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+	
+
+	
+
+	
+	
+}

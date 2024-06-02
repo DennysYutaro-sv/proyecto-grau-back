@@ -6,22 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.colegioabogados.springboot.backend.apirest.models.dao.IAgremiadoDao;
 import com.colegioabogados.springboot.backend.apirest.models.dao.IColegiadoDao;
+import com.colegioabogados.springboot.backend.apirest.models.dao.IDireccionDao;
 import com.colegioabogados.springboot.backend.apirest.models.dao.IFacturaDao;
 import com.colegioabogados.springboot.backend.apirest.models.dao.IImagenDao;
-import com.colegioabogados.springboot.backend.apirest.models.dao.IMultaDao;
 import com.colegioabogados.springboot.backend.apirest.models.dao.ITramiteDao;
-import com.colegioabogados.springboot.backend.apirest.models.dao.IUniversidadDao;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Agremiado;
+
 import com.colegioabogados.springboot.backend.apirest.models.entity.Colegiado;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Direccion;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Factura;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Habilidad;
+
 import com.colegioabogados.springboot.backend.apirest.models.entity.Imagen;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Multa;
+
 import com.colegioabogados.springboot.backend.apirest.models.entity.Sistema;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Tramite;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Universidad;
 
 @Service
 public class ColegiadoServiceImpl implements IColegiadoService{
@@ -33,13 +31,9 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 	@Autowired
 	private ITramiteDao tramiteDao;
 	@Autowired
-	private IMultaDao multaDao;
-	@Autowired
-	private IUniversidadDao universidadDao;
+	private IDireccionDao direccionDao;
 	@Autowired
 	private IImagenDao imagenDao;
-	@Autowired
-	private IAgremiadoDao agremiadoDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -48,6 +42,7 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 	}
 	
 	// ---  UNIVERSIDADES ---
+	/*
 	@Override
 	@Transactional(readOnly = true)
 	public List<Universidad> findAllUniversidades() {
@@ -69,7 +64,7 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 	public List<Habilidad> findAllHabilidades() {
 		return colegiadoDao.findAllHabilidades();
 	}
-
+	*/
 	@Override
 	@Transactional(readOnly = true)
 	public List<Colegiado> findColegiadoByDni(String term) {
@@ -194,28 +189,7 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 		return (List<Tramite>) tramiteDao.findAll();
 	}
 	//---- Servicios para multas ----
-	@Override
-	public Multa saveMulta(Multa multa) {
-		return multaDao.save(multa);
-	}
 	
-	@Override
-	@Transactional(readOnly = true)
-	public List<Tramite> findAllMultas(String term) {
-		return (List<Tramite>) multaDao.findAllMultas(term);
-	}
-	@Override
-	public List<Multa> findAllMultasAsig(String term) {
-		return (List<Multa>) multaDao.findAllMultasAsig(term) ;
-	}
-	@Override
-	public List<Multa> findAllMultasDeColegiado(String term1,boolean term2) {
-		return (List<Multa>) multaDao.findAllMultasDeColegiado(term1,term2) ;
-	}
-	@Override
-	public Multa findMultaById(Long id) {
-		return multaDao.findById(id).orElse(null);
-	}
 	//Obtener cumpleañeros
 	@Override
 	public List<Colegiado> findColegiadoCumple() {
@@ -241,6 +215,7 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 	public List<Object[]> ColegiadoCumpleFecha(String term) {
 		return colegiadoDao.findCumpleFecha(term);
 	}
+	/*
 	//Servicio para obtenes credenciales de agremiado
 	@Override
 	public List<Object[]> DatosAgremiado(String term) {
@@ -251,6 +226,7 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 	public Agremiado saveAgremiado(Agremiado agremiado) {
 		return agremiadoDao.save(agremiado);
 	}
+	*/
 	//----------------- SERVICIOS EXTERNOS ------------------
 	@Override
 	public List<Sistema> obtenerMensajeSistema() {
@@ -267,15 +243,6 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 		return colegiadoDao.findColegiadoByNombreApellidoExterno(term1, term2);
 	}
 
-	@Override
-	public List<Multa> listarMultasColegiado(String term) {
-		return multaDao.listarMultasColegiado(term);
-	}
-
-	@Override
-	public List<Tramite> listarNombresMultas() {
-		return multaDao.listarMultasExternas();
-	}
 	//SVDY 16012023 Almacenar imagenes
 	@Override
 	public Imagen findImagenById(Long id) {
@@ -320,6 +287,34 @@ public class ColegiadoServiceImpl implements IColegiadoService{
 	public List<Object[]> obtenerHabilidadColegiado(String term) {
 		return (List<Object[]>)colegiadoDao.AgremiadoHabilidad(term);
 	}
+
+	@Override
+	public List<Direccion> findAllDirecciones() {
+		return colegiadoDao.findAllDireccion();
+	}
+
+	@Override
+	public Direccion findDireccionById(Long id) {
+		return direccionDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public Direccion saveDireccion(Direccion direccion) {
+		return direccionDao.save(direccion);
+	}
+
+	@Override
+	public List<Tramite> findAllMultas(String term) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Tramite> listarNombresMultas() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

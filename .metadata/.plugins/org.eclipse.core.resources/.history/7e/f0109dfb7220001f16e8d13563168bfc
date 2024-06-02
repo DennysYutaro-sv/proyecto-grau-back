@@ -1,0 +1,18 @@
+spring.datasource.url= jdbc:mysql://localhost/db_colegiados?allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource.username=root
+spring.datasource.password=sasa
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=create-drop
+logging.level.org.hibernate.SQL=debug
+# Configuraciones adicionales
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# Niveles de log para Hibernate
+logging.level.org.hibernate.SQL=debug
+logging.level.org.hibernate.tool.hbm2ddl=debug
+
+# Configuración de Jackson
+spring.jackson.time-zone=America/Lima
+spring.jackson.locale=es_PE

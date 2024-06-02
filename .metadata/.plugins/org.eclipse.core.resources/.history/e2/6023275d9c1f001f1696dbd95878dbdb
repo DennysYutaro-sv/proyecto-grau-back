@@ -1,0 +1,5 @@
+package com.colegioabogados.springboot.backend.apirest.models.dao;
+
+public interface IDireccionDao {
+
+}

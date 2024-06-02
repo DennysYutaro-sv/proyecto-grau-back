@@ -32,15 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.colegioabogados.springboot.backend.apirest.dto.Mensaje;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Agremiado;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Colegiado;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Habilidad;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Direccion;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Imagen;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Multa;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Role;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Sistema;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Tramite;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Universidad;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Usuario;
 import com.colegioabogados.springboot.backend.apirest.models.services.CloudinaryService;
 import com.colegioabogados.springboot.backend.apirest.models.services.IColegiadoService;
@@ -113,52 +109,53 @@ public class ColegiadoRestController {
 		return colegiadoService.findAll();
 	}
 	
-	//--------------------- UNIVERSIDADES - -- - - - - - - - - -  -
-	//listar universidades
+	//--------------------- Direcciones - -- - - - - - - - - -  -
+	//listar Direcciones
+	
 	@Secured({"ROLE_ADMIN","ROLE_USER","ROLE_CAJA","ROLE_PARTES","ROLE_DECANO"})
-	@GetMapping("/colegiados/universidades")
-	public List<Universidad> listarUniversidades(){
-		return colegiadoService.findAllUniversidades();
+	@GetMapping("/colegiados/direcciones")
+	public List<Direccion> listarDirecciones(){
+		return colegiadoService.findAllDirecciones();
 	}
 	@Secured({"ROLE_ADMIN","ROLE_USER","ROLE_CAJA","ROLE_PARTES","ROLE_DECANO"})
-	@GetMapping("/colegiados/universidades/{id}")
+	@GetMapping("/colegiados/direcciones/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Universidad traerUniversidad(@PathVariable Long id) {
-		return colegiadoService.findUniversidadById(id);
+	public Direccion traerDireccion(@PathVariable Long id) {
+		return colegiadoService.findDireccionById(id);
 	}
 	
 	@Secured({"ROLE_ADMIN"})
-	@PostMapping("/colegiados/universidades")
+	@PostMapping("/colegiados/direcciones")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Universidad crearUniversidad(@RequestBody Universidad universidad) {
-		return colegiadoService.saveUniversidad(universidad);
+	public Direccion crearDireccion(@RequestBody Direccion direccion) {
+		return colegiadoService.saveDireccion(direccion);
 	}
 	
-	//Editar universidad
+	//Editar Direccion
 	@Secured({"ROLE_ADMIN"})
-	@PutMapping("/colegiados/universidades/{id}")
+	@PutMapping("/colegiados/direcciones/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Universidad updateUniversidad(@RequestBody Universidad universidad,@PathVariable Long id){
-		Universidad universidadActual = colegiadoService.findUniversidadById(id);
+	public Direccion updateDireccion(@RequestBody Direccion direccion,@PathVariable Long id){
+		Direccion direccionActual = colegiadoService.findDireccionById(id);
 		try {
-			universidadActual.setNombre(universidad.getNombre());
-			universidadActual.setDescripcion(universidad.getDescripcion());
+			direccionActual.setNombre(direccion.getNombre());
+			direccionActual.setDescripcion(direccion.getDescripcion());
 			
-			return colegiadoService.saveUniversidad(universidadActual);
+			return colegiadoService.saveDireccion(direccionActual);
 			
 		} catch (DataAccessException e) {
 			return null;
 		}
 
 	}
-	
+	/*
 	//listar habilidades
 	@Secured({"ROLE_ADMIN","ROLE_USER","ROLE_CAJA","ROLE_PARTES","ROLE_DECANO"})
 	@GetMapping("/colegiados/habilidades")
 	public List<Habilidad> listarHabilidades(){
 		return colegiadoService.findAllHabilidades();
 	}
-	
+	*/
 	//buscar por dni
 	@Secured({"ROLE_ADMIN","ROLE_USER","ROLE_CAJA","ROLE_PARTES","ROLE_DECANO"})
 	@GetMapping("/colegiados/filtrar-colegiados-dni/{term}")
@@ -234,7 +231,6 @@ public class ColegiadoRestController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<?> create(@Valid @RequestBody Colegiado colegiado,BindingResult result){
 		Colegiado colegiadoNew= null;
-		Agremiado agremiadoNew= new Agremiado();
 		Map<String, Object> response = new HashMap<>();
 		if (result.hasErrors()) {
 			List<String> errors = result.getFieldErrors()
@@ -247,11 +243,7 @@ public class ColegiadoRestController {
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
 		}
 		try {
-			colegiadoNew = colegiadoService.save(colegiado);
-			agremiadoNew.setAcolegiatura(colegiado.getColegiatura());
-			agremiadoNew.setUsurio("ICAC-"+colegiado.getColegiatura());
-			agremiadoNew.setPassword(colegiado.getColegiatura()+"-"+colegiado.getDni());
-			agremiadoNew = colegiadoService.saveAgremiado(agremiadoNew);
+
 		} catch (DataAccessException e) {
 			response.put("Mensaje","Error al realizar la inserción en la BD");
 			response.put("Error", e.getMessage().concat(" : ").concat(e.getMostSpecificCause().getMessage()));
@@ -286,26 +278,19 @@ public class ColegiadoRestController {
 		}
 		try {
 			colegiadoActual.setColegiatura(colegiado.getColegiatura());
-			colegiadoActual.setApellido(colegiado.getApellido());
 			colegiadoActual.setNombre(colegiado.getNombre());
 			colegiadoActual.setDni(colegiado.getDni());
 			colegiadoActual.setNacimiento(colegiado.getNacimiento());
 			colegiadoActual.setDepartamento(colegiado.getDepartamento());
 			colegiadoActual.setProvincia(colegiado.getProvincia());
 			colegiadoActual.setDistrito(colegiado.getDistrito());
-			colegiadoActual.setDomicilio(colegiado.getDomicilio());
-			colegiadoActual.setTrabajo(colegiado.getTrabajo());
-			colegiadoActual.setUniversidad(colegiado.getUniversidad());
 			colegiadoActual.setTelefono(colegiado.getTelefono());
 			colegiadoActual.setCorreo(colegiado.getCorreo());
-			colegiadoActual.setHabilidad(colegiado.getHabilidad());
 			colegiadoActual.setFechaFallecimiento(colegiado.getFechaFallecimiento());
 			colegiadoActual.setFechaColegiatura(colegiado.getFechaColegiatura());
 			colegiadoActual.setLm(colegiado.getLm());
 			colegiadoActual.setSexo(colegiado.getSexo());
-			colegiadoActual.setTelefono2(colegiado.getTelefono2());
 			colegiadoActual.setImagenId(colegiado.getImagenId());
-			colegiadoActual.setEspecialidad(colegiado.getEspecialidad());
 			colegiadoActual.setOtros(colegiado.getOtros());
 			colegiadoActual.setActualizador(colegiado.getActualizador());
 			
@@ -394,12 +379,13 @@ public class ColegiadoRestController {
 		return colegiadoService.ColegiadoCumpleFecha(term);
 	}
 	/*SVDY 16042023 Obtiene credenciales del agremiado*/
+	/*
 	@Secured({"ROLE_ADMIN","ROLE_USER","ROLE_CAJA","ROLE_PARTES","ROLE_DECANO"})
 	@GetMapping("/agremiado/{term}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Object[]> obtenerCredencialesAgremiado(@PathVariable String term){
 		return colegiadoService.DatosAgremiado(term);
-	}
+	}*/
 	/* --------------------------- APIS EXTERNAS -------------------------*/
 	//Obtener licencia del software
 	@GetMapping("/sistema")
@@ -422,17 +408,20 @@ public class ColegiadoRestController {
 		return colegiadoService.findColegiadoByNombreApellidoExterno(term1, term2);
 	}
 	//Buscar multas por colegiatura
+	/*
 	@GetMapping("/m7rf56dfgfv86yigk/{term}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Multa> ListarMultasColegiado(@PathVariable String term){
 		return colegiadoService.listarMultasColegiado(term);
 	}
+	
 	//Listar de multas
 	@GetMapping("/nd56y67igh7drstrt")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Tramite> ListarNombresMultass(){
 		return colegiadoService.listarNombresMultas();
 	}
+	*/
 	//Obtener datos de agremido por colegiatura
 	@GetMapping("/obtener-colegiado-y4w4r/{term}")
 	@ResponseStatus(HttpStatus.OK)
@@ -444,23 +433,6 @@ public class ColegiadoRestController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<Object[]> obtenerCursosAgremiado(@PathVariable String term){
 		return colegiadoService.obtenerCursosColegiado(term);
-	}
-	//Editar colegiado Externo
-	@PutMapping("/actualizar-colegiado-y4w4r/{term}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> updateColegiadoExt(@RequestBody Colegiado colegiado,@PathVariable String term){
-		Colegiado colegiadoActual = colegiadoService.findColegiadoByColegiaturaExterno(term);
-		try {
-			colegiadoActual.setCorreo(colegiado.getCorreo());
-			colegiadoActual.setDomicilio(colegiado.getDomicilio());
-			colegiadoActual.setTrabajo(colegiado.getTrabajo());
-			colegiadoActual.setTelefono2(colegiado.getTelefono2());
-			colegiadoService.save(colegiadoActual);
-			return new  ResponseEntity(new Mensaje("Sus datos se actualizarón correctamente."),HttpStatus.OK);
-			
-		} catch (DataAccessException e) {
-			return null;
-		}
 	}
 	//Obtener cursos de agremido por colegiatura
 	@GetMapping("/obtener-habilidad-y4w4r/{term}")

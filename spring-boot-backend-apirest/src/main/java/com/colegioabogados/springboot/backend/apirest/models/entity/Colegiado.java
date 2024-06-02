@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -38,17 +39,13 @@ public class Colegiado implements Serializable{
 	private String colegiatura;
 	
 	@NotEmpty(message = "no puede estar vacío")
-	@Column(nullable = false)
-	private String apellido;
-	
-	@NotEmpty(message = "no puede estar vacío")
 	@Size(min = 2)
 	@Column(nullable = false)
 	private String nombre;
 	
 	@NotEmpty(message = "no puede estar vacío")
-	@Size(min = 8,max = 8,message = "debe contener 8 numerós")
-	@Column(unique = true,nullable = false)
+	@Size(min = 6,max = 20,message = "debe contener de 6 a 20 carácteres")
+	@Column(nullable = false)
 	private String dni;
 	
 	@NotNull(message = "no puede estar vacío")
@@ -56,40 +53,28 @@ public class Colegiado implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date nacimiento;
 	
-	@NotEmpty(message = "no puede estar vacío")
-	@Column(nullable = false)
+	//@NotEmpty(message = "no puede estar vacío")
+	//@Column(nullable = false)
 	private String departamento;
 	
-	@NotEmpty(message = "no puede estar vacío")
-	@Column(nullable = false)
+	//@NotEmpty(message = "no puede estar vacío")
+	//@Column(nullable = false)
 	private String provincia;
 	
-	@NotEmpty(message = "no puede estar vacío")
-	@Column(nullable = false)
+	//@NotEmpty(message = "no puede estar vacío")
+	//@Column(nullable = false)
 	private String distrito;
-
-	private String domicilio;
 	
-	private String trabajo;
-	
-	@NotNull(message = "no puede estar vacío")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="universidad_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	private Universidad universidad;
+	private String nroMedidor;
 	
 	@NotEmpty(message = "no puede estar vacío")
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String telefono;
 	
 	@Email(message = "no es dirección de correo con formato correcto")
+	@Null(message = "El correo no puede ser especificado")
+	@Column(nullable = true)
 	private String correo;
-	
-	@NotNull(message = "no puede estar vacío")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="habilidad_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	private Habilidad habilidad;
 	
 	@Column(name = "fecha_fallecimiento")
 	//@Temporal(TemporalType.DATE)
@@ -110,21 +95,29 @@ public class Colegiado implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "colegiado", cascade = CascadeType.ALL)
 	private List<Factura> facturas;
 	
-
-	private String telefono2;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="especialidad_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	private Especialidad especialidad;
-	
 	private String otros;
 	//15012023 subir imagen a clodinary
 	private String imagenId;
 	
 	private String actualizador;
 	
+	//Nuevos parametros 
+	private String agua;
+	@Column(nullable = true)
+	private Boolean estado;
 	
+	private String limpieza;
+	
+	private Boolean medidor;
+	
+	private String registrador;
+	
+	@NotNull(message = "no puede estar vacío")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="direccion_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	private Direccion direccion;
+
 	public Colegiado() {
 		this.facturas = new ArrayList<>();
 	}
@@ -145,14 +138,6 @@ public class Colegiado implements Serializable{
 
 	public void setColegiatura(String colegiatura) {
 		this.colegiatura = colegiatura;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
 	}
 
 	public String getNombre() {
@@ -203,22 +188,6 @@ public class Colegiado implements Serializable{
 		this.distrito = distrito;
 	}
 
-	public String getDomicilio() {
-		return domicilio;
-	}
-
-	public void setDomicilio(String domicilio) {
-		this.domicilio = domicilio;
-	}
-
-	public String getTrabajo() {
-		return trabajo;
-	}
-
-	public void setTrabajo(String trabajo) {
-		this.trabajo = trabajo;
-	}
-
 	public String getTelefono() {
 		return telefono;
 	}
@@ -259,22 +228,6 @@ public class Colegiado implements Serializable{
 	public void setFechaColegiatura(Date fechaColegiatura) {
 		this.fechaColegiatura = fechaColegiatura;
 	}
-
-	public Universidad getUniversidad() {
-		return universidad;
-	}
-
-	public void setUniversidad(Universidad universidad) {
-		this.universidad = universidad;
-	}
-
-	public Habilidad getHabilidad() {
-		return habilidad;
-	}
-
-	public void setHabilidad(Habilidad habilidad) {
-		this.habilidad = habilidad;
-	}
 	
 	public String getFechaFallecimiento() {
 		return fechaFallecimiento;
@@ -291,14 +244,6 @@ public class Colegiado implements Serializable{
 	public void setFacturas(List<Factura> facturas) {
 		this.facturas = facturas;
 	}
-	
-	public String getTelefono2() {
-		return telefono2;
-	}
-
-	public void setTelefono2(String telefono2) {
-		this.telefono2 = telefono2;
-	}
 
 	public String getImagenId() {
 		return imagenId;
@@ -306,14 +251,6 @@ public class Colegiado implements Serializable{
 
 	public void setImagenId(String imagenId) {
 		this.imagenId = imagenId;
-	}
-
-	public Especialidad getEspecialidad() {
-		return especialidad;
-	}
-
-	public void setEspecialidad(Especialidad especialidad) {
-		this.especialidad = especialidad;
 	}
 
 	public String getOtros() {
@@ -330,6 +267,64 @@ public class Colegiado implements Serializable{
 
 	public void setActualizador(String actualizador) {
 		this.actualizador = actualizador;
+	}
+	
+	
+
+	public String getAgua() {
+		return agua;
+	}
+
+	public void setAgua(String agua) {
+		this.agua = agua;
+	}
+
+	public Boolean getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Boolean estado) {
+		this.estado = estado;
+	}
+
+	public String getLimpieza() {
+		return limpieza;
+	}
+
+	public void setLimpieza(String limpieza) {
+		this.limpieza = limpieza;
+	}
+
+	public Boolean getMedidor() {
+		return medidor;
+	}
+
+	public void setMedidor(Boolean medidor) {
+		this.medidor = medidor;
+	}
+
+	public String getRegistrador() {
+		return registrador;
+	}
+
+	public void setRegistrador(String registrador) {
+		this.registrador = registrador;
+	}
+
+	public Direccion getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(Direccion direccion) {
+		this.direccion = direccion;
+	}
+	
+	public String getNroMedidor() {
+		return nroMedidor;
+	}
+
+	public void setNroMedidor(String nroMedidor) {
+		this.nroMedidor = nroMedidor;
 	}
 
 	private static final long serialVersionUID = 1L;

@@ -2,15 +2,12 @@ package com.colegioabogados.springboot.backend.apirest.models.services;
 
 import java.util.List;
 
-import com.colegioabogados.springboot.backend.apirest.models.entity.Agremiado;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Colegiado;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Direccion;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Factura;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Habilidad;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Imagen;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Multa;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Sistema;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Tramite;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Universidad;
 
 public interface IColegiadoService {
 	
@@ -25,14 +22,15 @@ public interface IColegiadoService {
 	
 	// ----   UNIVERSIDADES ----
 	//Servicio para listar universidades
-	public List<Universidad> findAllUniversidades();
 	
-	public Universidad findUniversidadById(Long id);
+	public List<Direccion> findAllDirecciones();
 	
-	public Universidad saveUniversidad(Universidad universidad);
+	public Direccion findDireccionById(Long id);
+	
+	public Direccion saveDireccion(Direccion direccion);
 	
 	//Servicio para listar habilidades
-	public List<Habilidad> findAllHabilidades();
+	//public List<Habilidad> findAllHabilidades();
 	
 	//Servicio para buscar por dni
 	public List<Colegiado> findColegiadoByDni(String term);
@@ -96,17 +94,10 @@ public interface IColegiadoService {
 	//Servicio para listar tramites
 	public List<Tramite> findAllTramites();
 	
-	//MULTAS
-	//Servicio para buscar una multa por id
-	public Multa findMultaById(Long id);
-	//Servicio para crear multa
-	public Multa saveMulta(Multa multa);
+
 	//Servicio para traer tramites tipo multa
 	public List<Tramite> findAllMultas(String term);
 	//Servicio para traer una multa asignada a varios colegiados
-	public List<Multa> findAllMultasAsig(String term);
-	//Servicio para traer todas las multas de un colegiado
-	public List<Multa> findAllMultasDeColegiado(String term1,boolean term2);
 	
 	//Notificaciones de cumpleaños
 	public List<Colegiado> findColegiadoCumple();
@@ -131,10 +122,8 @@ public interface IColegiadoService {
 	public List<Object[]> ColegiadoCumpleFecha(String term);
 	
 	//SVDY 16042023 Servicio para traer datos del agremiado
-	public List<Object[]> DatosAgremiado(String term);
+	//public List<Object[]> DatosAgremiado(String term);
 	
-	//Servicio para crear multa
-	public Agremiado saveAgremiado(Agremiado agremiado);
 	
 	/*-------------- SERVICIOS EXTERNOS -----------------*/
 	//Serivicio para la licencia de sistema
@@ -145,9 +134,6 @@ public interface IColegiadoService {
 	
 	//Servicio para obtener colegiado por nombre y apellido
 	public Colegiado findColegiadoByNombreApellidoExterno(String term1,String term2);
-	
-	//Servicio para obtener multas por colegiatura
-	public List<Multa> listarMultasColegiado(String term);
 	
 	//Servicio para obtener nombres de multas
 	public List<Tramite> listarNombresMultas();

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colegioabogados.springboot.backend.apirest.models.entity.Factura;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Multa;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Tramite;
 import com.colegioabogados.springboot.backend.apirest.models.services.IColegiadoService;
 
@@ -159,53 +158,12 @@ public class FacturaRestController {
 	}
 	/*  Mantenimiento multas   */
 	
-	//Crear multas
-	//@Secured({"ROLE_ADMIN"})
-	@PostMapping("/multas")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Multa crearMulta(@RequestBody Multa multa) {
-		return colegiadoService.saveMulta(multa);
-	}
 	
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/multas/{term}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Tramite> traerMultas(@PathVariable String term) {
 		return colegiadoService.findAllMultas(term);
-	}
-	
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
-	@GetMapping("/multas/asignados/{term}")
-	@ResponseStatus(HttpStatus.OK)
-	public List<Multa> traerMultasAsignadas(@PathVariable String term) {
-		return colegiadoService.findAllMultasAsig(term);
-	}
-	
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
-	@GetMapping("/multas/colegiado/{term1}/{term2}")
-	@ResponseStatus(HttpStatus.OK)
-	public List<Multa> traerMultasAsignadasColegiado(@PathVariable String term1,@PathVariable boolean term2) {
-		return colegiadoService.findAllMultasDeColegiado(term1,term2);
-	}
-	
-	//Editar multa
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
-	@PutMapping("/multas/colegiado/{id}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Multa updateMulta(@RequestBody Multa multa,@PathVariable Long id){
-		Multa multaActual = colegiadoService.findMultaById(id);
-		try {
-			multaActual.setNombre(multa.getNombre());
-			multaActual.setColegiatura(multa.getColegiatura());
-			multaActual.setTramiteid(multa.getTramiteid());
-			multaActual.setPagado(multa.isPagado());
-
-			 return colegiadoService.saveMulta(multaActual);
-			
-		} catch (DataAccessException e) {
-			return null;
-		}
-
 	}
 
 }

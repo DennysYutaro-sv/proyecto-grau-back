@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.colegioabogados.springboot.backend.apirest.models.entity.Colegiado;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Habilidad;
+import com.colegioabogados.springboot.backend.apirest.models.entity.Direccion;
 import com.colegioabogados.springboot.backend.apirest.models.entity.Sistema;
-import com.colegioabogados.springboot.backend.apirest.models.entity.Universidad;
 
 public interface IColegiadoDao extends CrudRepository<Colegiado, Long>{
 
@@ -29,11 +28,13 @@ public interface IColegiadoDao extends CrudRepository<Colegiado, Long>{
 	@Query(value="SELECT * FROM colegiados WHERE EXTRACT(YEAR FROM fecha_colegiatura) = EXTRACT(YEAR FROM CURDATE())",nativeQuery = true)
 	public List<Colegiado> findColegiadosUltimos();
 	
-	@Query("from Universidad")
-	public List<Universidad> findAllUniversidades();
 	
+	@Query("from Direccion")
+	public List<Direccion> findAllDireccion();
+	/*
 	@Query("from Habilidad")
 	public List<Habilidad> findAllHabilidades();
+	*/
 	
 	@Query(value = "SELECT * FROM colegiados WHERE id = (SELECT MAX(id) FROM colegiados)", nativeQuery = true)
 	public Colegiado findLastColegiado();

@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="javax.validation.constraints.Null"/>
+    <fullyQualifiedTypeName name="java.lang.Boolean"/>
+    <fullyQualifiedTypeName name="java.lang.Double"/>
+    <fullyQualifiedTypeName name="com.colegioabogados.springboot.backend.apirest.models.dao.IDireccionDao"/>
+    <fullyQualifiedTypeName name="com.colegioabogados.springboot.backend.apirest.models.entity.Direccion"/>
+</qualifiedTypeNameHistroy>
